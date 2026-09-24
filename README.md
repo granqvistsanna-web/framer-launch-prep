@@ -4,7 +4,9 @@ A Claude Code skill for the last pass before a Framer site goes live. It measure
 published site, fixes what can be fixed through the Framer agent, hands you the parts
 only you can do (pasting custom code, publishing), and measures again.
 
-Claude works in phases and keeps a markdown tracker you can follow as it goes.
+Claude works in phases and keeps a markdown tracker you can follow as it goes. Each
+phase runs in its own fresh session and ends with a one-line prompt you paste into the
+next one, carrying the project, branch, paths and open approvals with it.
 It never publishes and never merges.
 
 ## Install

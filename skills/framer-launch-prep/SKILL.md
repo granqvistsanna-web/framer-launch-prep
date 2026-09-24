@@ -1,6 +1,6 @@
 ---
 name: framer-launch-prep
-description: The last pass before a Framer site launches, run in gated phases with a markdown checklist you can follow. Baseline Lighthouse, then images (download every one, resize to what the site needs, convert to WebP, rename with the brand, strip ChatGPT/IMG_/Untitled names, write alt text, re-upload, verify, repoint), JSON-LD schema written to files with a click-by-click paste guide, SEO basics (titles, descriptions, H1s, slugs, noindex, OG images), technical accessibility (landmarks, heading outline, accessible names, real controls, measured in Chrome at every breakpoint), Framer-specific performance fixes, launch hygiene (redirects, domain, 404, consent, forms), and a final Lighthouse comparison. Use when the user says "framer-launch-prep", "launch prep", "pre-launch", "go-live", "before we launch", "prep the Framer site for launch", "get a good Lighthouse score on Framer", "optimise the images", "alt text before launch", or wants a Framer site made launch-ready. Resumable: it reads its own tracker and continues where it stopped. Never publishes or merges.
+description: The last pass before a Framer site launches, run in gated phases with a markdown checklist you can follow. Baseline Lighthouse, then images (download every one, resize to what the site needs, convert to WebP, rename with the brand, strip ChatGPT/IMG_/Untitled names, write alt text, re-upload, verify, repoint), JSON-LD schema written to files with a click-by-click paste guide, SEO basics (titles, descriptions, H1s, slugs, noindex, OG images), technical accessibility (landmarks, heading outline, accessible names, real controls, measured in Chrome at every breakpoint), Framer-specific performance fixes, launch hygiene (redirects, domain, 404, consent, forms), and a final Lighthouse comparison. Use when the user says "framer-launch-prep", "launch prep", "pre-launch", "go-live", "before we launch", "prep the Framer site for launch", "get a good Lighthouse score on Framer", "optimise the images", "alt text before launch", or wants a Framer site made launch-ready. One phase per session: every phase ends with a one-line handoff prompt to paste into a fresh session to start the next phase, and a pasted handoff line is itself a trigger. Resumable: it reads its own tracker and continues where it stopped. Never publishes or merges.
 ---
 
 # Framer launch prep
@@ -35,6 +35,51 @@ installs) and Node 18+. Chrome for Lighthouse. Everything else installs on first
    else's ticks: restore and redo. Re-read a node before writing it.
 7. **Copy style:** the site's language and voice, no trailing full stop on titles.
 
+## One phase, one session
+
+Every phase runs in its **own fresh session**. By Phase 3 a single session is carrying
+image dumps, scan output and exec logs, and it gets slow and sloppy. The handoff line
+replaces that context: the next session starts from it plus the tracker, and nothing else.
+
+- **Never start the next phase in the same session**, even when there is room. Finish the
+  phase, or park it at its gate, then hand off.
+- **Every phase ends with a handoff line**: one sentence in its own fenced block so it
+  copies in one click. It goes in the reply and also into the tracker's *Next session*
+  block, replacing the old line with a targeted Edit, so a lost chat loses nothing.
+  Append it to *Log* too.
+- **The tracker outranks the line.** A new session reads the tracker in full anyway. If
+  the two disagree, the tracker wins, and you say so in one line.
+
+### The handoff line
+
+One sentence, English, ≤ 90 words, every path and id written out in full with no
+placeholders left. Fields, in this order:
+
+1. **The trigger and the phase:** `/framer-launch-prep Phase <n> (<name>)`
+2. **Project:** site name, project id, editor URL
+3. **Branch:** title + id, or `main`, with how the project is protected
+   (e.g. "main auto-forks on first write")
+4. **What is measured:** the published origin + the key-page paths, the same list every phase
+5. **Where:** the tracker's absolute path and the work folder `D`
+6. **Where things stand:** the last phase's result in a few words, plus every gate still
+   open and what to do once the owner approves it
+7. **Carry:** at most two facts this session learned that the tracker doesn't make obvious
+   (a trap, a dead-session rate, "CMS alt already written live on main"). Anything longer
+   goes under *Findings* in the tracker, and the line points there
+
+Example (a made-up project, for the shape only):
+
+```
+/framer-launch-prep Phase 2 (Schema) on Acme Studio (AbC123xyz, https://framer.com/projects/Acme-Studio--AbC123xyz-q1w2e), branch "Launch prep" (k9f2m1x0, base main, main auto-forks on first write), measuring https://acme-staging.framer.app on /, /pricing, /blog/first-post; tracker "~/Downloads/Acme Studio launch prep/TRACKER.md", files "~/Downloads/Acme Studio launch prep/"; Phase 1 is parked at its gate: if the owner says review.html is approved, run Phase 1 steps 5–8 first; carry: 3 of 5 session-new calls came up dead, and two CMS rows have no alt field (see Findings).
+```
+
+**Gates park a phase, they don't stop the run.** When a phase reaches a 🙋 gate, finish
+everything in it that doesn't depend on the answer, then hand off to the **next** phase
+with the gate named in field 6. The approvals pile up on *🙋 Your list*, so the owner can
+still approve them in one sitting, and the session that receives the approval applies it
+before it starts its own phase. The owner can reply "approved" in the same message as the
+pasted line.
+
 ## Where things go
 
 Ask once, at the start, where the tracker should live (a notes folder, an Obsidian vault,
@@ -67,8 +112,12 @@ tracker header:
 
 ## Start, or resume
 
-- **A tracker exists:** read it in full, find the first unticked line, and say in one line
-  where you are resuming. Don't redo a ticked phase unless the site changed since (compare
+- **Started from a handoff line:** take the phase, ids, paths and origin from it, then
+  read the tracker in full anyway. First apply any gate the line names that the owner has
+  approved in their message, then run the named phase, and only that phase.
+- **A tracker exists but there is no line:** read it in full. Its *Next session* block
+  names the phase; otherwise take the first unticked line. Say in one line where you are
+  resuming. Don't redo a ticked phase unless the site changed since (compare
   `getPublishInfo()` and the canvas against the tracker's last *Log* line). If
   `/tmp/framer-launch` is gone (a reboot), copy the Phase 1 files back from `D/images/`.
 - **None:** copy `R/tracker-template.md` to the chosen place, fill the header, start Phase 0.
@@ -80,10 +129,16 @@ new session), and `getActiveBranch()`.
 ## The phases
 
 Three things need the owner's approval: the image names and alt texts (Phase 1), the
-entity facts (Phase 2), the titles and descriptions (Phase 3). **Batch them.** Draft all
-three before stopping so the owner approves in one sitting, and keep working on
-everything that doesn't wait on them. Stop only when every open item waits on the owner,
-then tick the tracker and add their items to *🙋 Your list*.
+entity facts (Phase 2), the titles and descriptions (Phase 3). Each is parked, not waited
+on (see *One phase, one session*): the phase does everything that doesn't depend on the
+answer, adds the item to *🙋 Your list*, and hands off to the next phase. By the end of
+Phase 3 all three sit on the list together, so the owner can still approve in one sitting.
+
+**Every phase ends the same way:** tick the tracker, write the handoff line into its *Next
+session* block and *Log*, then reply with the result, the handoff line and the next
+action. Phase 6 is the last; it ends with no line, just the report.
+
+Phase 5 and *Launch hygiene* share one session. Everything else is one phase per session.
 
 ### Phase 0 · Baseline (🤖)
 
@@ -245,8 +300,9 @@ is left under *Open* and whose call it is. Fill the tracker's final scores row.
 
 ## Replies
 
-At each gate: the result first, short. Then one line of what was done and **one** next
-action for the owner, the top of their list. Long tables go in the tracker, not the chat.
+At the end of each phase: the result first, short. Then the handoff line in its own
+fenced block, then one line of what was done and **one** next action for the owner: "open
+a new session and paste the line", plus the top gate item from their list if there is one. Long tables go in the tracker, not the chat.
 
 ## Quality bar
 
@@ -272,3 +328,6 @@ action for the owner, the top of their list. Long tables go in the tracker, not 
 - Reporting a Lighthouse score measured on anything but the published site
 - Chasing mobile Performance 100 instead of the audits Lighthouse actually names
 - Rewriting the tracker instead of editing one line
+- Rolling straight into the next phase because the session still has room
+- A handoff line with a `<placeholder>` left in it, a path the next session can't resolve,
+  or a branch title without its id. The next session can't ask what you meant

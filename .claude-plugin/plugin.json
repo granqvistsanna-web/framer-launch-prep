@@ -1,6 +1,6 @@
 {
   "name": "framer-launch-prep",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "The last pass before a Framer site launches: baseline Lighthouse, images resized, converted to WebP, renamed and given alt text, JSON-LD schema with a paste guide, SEO and accessibility fixes, launch hygiene, and a before/after Lighthouse comparison. Gated phases, a markdown tracker, never publishes.",
   "author": { "name": "Sanna Granqvist", "email": "granqvistsanna@gmail.com" },
   "homepage": "https://github.com/granqvistsanna-web/framer-launch-prep",

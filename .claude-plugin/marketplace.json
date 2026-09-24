@@ -7,7 +7,7 @@
       "name": "framer-launch-prep",
       "source": "./",
       "description": "Pre-launch pass for Framer sites: images, alt text, schema, SEO, accessibility, Lighthouse before and after.",
-      "version": "0.2.0"
+      "version": "0.3.0"
     }
   ]
 }

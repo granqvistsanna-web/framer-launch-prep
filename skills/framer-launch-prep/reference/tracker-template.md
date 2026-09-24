@@ -7,6 +7,15 @@
 Nothing on this list is published or merged by Claude. Every measured score below is of
 the **published** site, so a fix only shows up after you publish.
 
+## Next session
+
+One phase per session. Open a new session and paste this line; Claude replaces it at the
+end of every phase.
+
+```
+{{HANDOFF_LINE}}
+```
+
 ## 🙋 Your list
 
 The things only you can do, in the order they unblock work. Claude adds to this list as
