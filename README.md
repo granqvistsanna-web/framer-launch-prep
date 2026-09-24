@@ -24,7 +24,7 @@ Then, in a session: `/framer-launch-prep` or "launch prep for <project url>".
 | 1 · Images | Downloads every image, writes names and alt text from looking at each picture, resizes to what the site draws, converts to WebP, re-uploads, verifies each upload pixel by pixel, repoints every usage | Approve names and alt texts on a contact sheet |
 | 2 · Schema | Organization, WebSite, FAQPage, Article… one file per paste location, each parsed, plus a click-by-click paste guide | Paste, then publish |
 | 3 · SEO | Titles, descriptions, one H1 per page, slugs, noindex, social image, favicon | Approve titles and descriptions |
-| 4 · Accessibility | Contrast per colour-style pair, link and button names, tap targets, focus, labels | — |
+| 4 · Accessibility | Structure at every breakpoint: landmarks, headings, names for every link, button, image, input and iframe, real controls, language (axe-core in Chrome) | — |
 | 5 · Performance | Fixes what Lighthouse names: LCP, render-blocking scripts, embeds, fonts, CLS | Decide which third-party scripts stay |
 | Launch hygiene | Redirects, domain, 404, consent, analytics, locales | Test form, Search Console |
 | 6 · Final | Scan + Lighthouse again, before → after table, report | Publish |

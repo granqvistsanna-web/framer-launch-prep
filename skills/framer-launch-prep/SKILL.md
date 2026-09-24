@@ -1,6 +1,6 @@
 ---
 name: framer-launch-prep
-description: The last pass before a Framer site launches, run in gated phases with a markdown checklist you can follow. Baseline Lighthouse, then images (download every one, resize to what the site needs, convert to WebP, rename with the brand, strip ChatGPT/IMG_/Untitled names, write alt text, re-upload, verify, repoint), JSON-LD schema written to files with a click-by-click paste guide, SEO basics (titles, descriptions, H1s, slugs, noindex, OG images), accessibility, Framer-specific performance fixes, launch hygiene (redirects, domain, 404, consent, forms), and a final Lighthouse comparison. Use when the user says "framer-launch-prep", "launch prep", "pre-launch", "go-live", "before we launch", "prep the Framer site for launch", "get a good Lighthouse score on Framer", "optimise the images", "alt text before launch", or wants a Framer site made launch-ready. Resumable: it reads its own tracker and continues where it stopped. Never publishes or merges.
+description: The last pass before a Framer site launches, run in gated phases with a markdown checklist you can follow. Baseline Lighthouse, then images (download every one, resize to what the site needs, convert to WebP, rename with the brand, strip ChatGPT/IMG_/Untitled names, write alt text, re-upload, verify, repoint), JSON-LD schema written to files with a click-by-click paste guide, SEO basics (titles, descriptions, H1s, slugs, noindex, OG images), technical accessibility (landmarks, heading outline, accessible names, real controls, measured in Chrome at every breakpoint), Framer-specific performance fixes, launch hygiene (redirects, domain, 404, consent, forms), and a final Lighthouse comparison. Use when the user says "framer-launch-prep", "launch prep", "pre-launch", "go-live", "before we launch", "prep the Framer site for launch", "get a good Lighthouse score on Framer", "optimise the images", "alt text before launch", or wants a Framer site made launch-ready. Resumable: it reads its own tracker and continues where it stopped. Never publishes or merges.
 ---
 
 # Framer launch prep
@@ -164,16 +164,43 @@ What to write: **`R/schema-templates.md`**. How to package it: **`R/schema-hando
    `lang`, it goes on the owner's list.
 8. Links to draft pages render as a link to home: `site-scan.mjs` flags them; repoint.
 
-### Phase 4 · Accessibility (🤖)
+### Phase 4 · Accessibility: structure (🤖)
 
-Lighthouse accessibility audits first, then the checks it cannot make. Fixes per audit in
-**`R/lighthouse-levers.md`**.
+The point is that **everything on the page is exposed clearly**: to a screen reader, to a
+keyboard, and to the crawlers and models that read the same accessibility tree. It is
+structural and technical. Colour contrast and tap targets are *not* the focus: fix them
+only where Lighthouse flags them.
 
-- **Contrast by colour-style pair**: every text colour on every surface it sits on. AA:
-  4.5:1 body, 3:1 large text and UI. Fix by rebinding to a passing style; if none passes,
-  ask before adding one.
-- Link and button names, tap targets ≥ 24 px, visible focus, form labels, keyboard order,
-  Escape closes menus, no autoplaying sound.
+```bash
+node $S/a11y-structure.mjs <origin> "$D" baseline --paths <same key pages>   # 1440 / 810 / 390
+```
+
+It drives real Chrome at each breakpoint (Framer ships all three in the HTML and hides
+two) and runs axe-core with contrast and target size switched off. Fix, in this order:
+
+1. **Landmarks.** Exactly one `main`, one `header`, one `footer` per page, a `nav` at every
+   breakpoint (the phone menu included), and no content outside a landmark. Fix with
+   `SET <frameId> htmlTag="main";` (also `header`, `nav`, `footer`, `section`, `article`,
+   `aside`) on the page frame or layout template. `htmlTag` mirrors to breakpoint replicas;
+   read each back anyway. Two `nav`s get an `ariaLabel` each ("Main", "Footer").
+2. **Headings.** One H1 per page at every width, no level skips, and no heading used for
+   size alone. Fix the text node's `tag`; keep its text style. Variable-bound text may drop
+   a per-node tag at hydration: clone the text style, change only its tag, and bind that.
+3. **Names.** Every link and button has a name that makes sense read out of context:
+   icon-only links (social, arrows, burger) get `ariaLabel`; "Read more" / "Läs mer"
+   repeated to different targets gets rewritten to name its target (copy: the Phase 3 gate).
+   Decorative images are `alt=""`, informative ones are described (Phase 1).
+4. **Real controls.** Anything clickable is a link or a button, reachable by Tab, with
+   visible focus. Divs with a click handler, a burger that is a checkbox in a label,
+   accordions without `aria-expanded`: fix in the component, or flag a code component to
+   its owner. No positive `tabindex`.
+5. **Forms and embeds.** Every input has a label (a placeholder is not one); every iframe
+   has a `title`.
+6. **Language.** `<html lang>` set; parts in another language marked.
+
+Re-run the script after fixes (label `after`). Tick when every page is clean at all three
+widths, or each remaining item is explained. Lighthouse accessibility at 100 then follows,
+and it is a check, not the goal.
 
 ### Phase 5 · Performance (🤖, 🙋 on third-party scripts)
 
@@ -230,6 +257,8 @@ action for the owner, the top of their list. Long tables go in the tracker, not 
 - No layer or asset named after a tool, a camera or a default
 - Every JSON-LD block on the live site parses; no `{{` survives
 - One H1 per page at every breakpoint; every indexable page has its own title and description
+- One `main`, one `header`, one `footer` and a `nav` on every page at every breakpoint; every
+  link, button, image, input and iframe named; no content outside a landmark
 - Accessibility, Best Practices and SEO at 100 on every key page
 - Performance: every audit the baseline named is fixed or explained. Framer ships its own
   runtime, so there is no fixed Performance number

@@ -38,19 +38,20 @@ Performance 67. Everything below is the part that **is** in our hands.
 
 | Audit id | Usual Framer cause | Fix |
 |---|---|---|
-| `color-contrast` | Muted text token on a tinted surface; text on an image; placeholder text | Measure the token pair; change the token binding, never the hex. If no token passes, say so and ask before adding one |
 | `link-text` | "Learn more", "Read more", "Läs mer" repeated | Rewrite the visible text so it names the target ("Read the pricing guide"). Copy change: regulated sites go through the owner's sign-off |
 | `link-name`, `button-name` | Icon-only link or button (social icons, arrows, burger) | Give the frame an accessible label / visible text; social icons: the network name |
 | `image-alt` | Missing alt | Phase 1 |
 | `heading-order` | h2 → h4 for visual size | Fix the tag, keep the style (if the text is variable-bound, a per-node tag may not survive hydration: clone the text style, change only its tag, and bind that) |
-| `target-size` | Footer links, inline icons < 24 px | Padding on the link frame, not a bigger font |
 | `html-has-lang` | Site language never set | Site Settings → language (or the default locale) |
 | `label` | Form input without a label | Visible label; placeholder is not a label |
 | `aria-*`, `duplicate-id-aria` | Usually a code component | Fix in the component |
+| `landmark-one-main`, `region` | The page frame is a plain div | `SET <frameId> htmlTag="main";` — see Phase 4 |
+| `color-contrast` (only if flagged) | Muted text token on a tinted surface; text on an image | Rebind to a passing token, never a hex. If none passes, ask before adding one |
+| `target-size` (only if flagged) | Footer links, inline icons < 24 px | Padding on the link frame, not a bigger font |
 
-Lighthouse checks about 30% of WCAG. After it reads 100, still check by hand: keyboard
-tab order through nav and forms, visible focus, menus closing on Escape, nothing that
-only works on hover, reduced motion respected by code components.
+Lighthouse checks about 30% of WCAG, and only at one width. `a11y-structure.mjs` covers the
+structure at all three breakpoints. Still check by hand: tab through nav and forms, menus
+close on Escape, nothing works only on hover.
 
 ## Best practices
 

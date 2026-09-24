@@ -83,15 +83,17 @@ there is no fixed Performance number to hit.
 - [ ] 🤖 No live link points at a draft (renders as `href="./"`)
 - [ ] 🙋 Sitemap submitted in Search Console after launch
 
-## Phase 4 · Accessibility
+## Phase 4 · Accessibility: structure
 
-- [ ] 🤖 Contrast of every text-colour / surface pair in use, measured against the tokens
-- [ ] 🤖 Every link and button has a name that makes sense out of context
-- [ ] 🤖 Tap targets ≥ 24×24 px (WCAG 2.2), nav and footer links included
-- [ ] 🤖 Focus is visible on every interactive element
-- [ ] 🤖 Form fields have labels; errors are announced
-- [ ] 🤖 Motion: nothing essential depends on an animation; no autoplaying sound
-- [ ] 🤖 Lighthouse accessibility 100 on every key page
+Measured in Chrome at 1440 / 810 / 390 → `a11y/baseline/structure.md`, re-run → `a11y/after/`
+
+- [ ] 🤖 Landmarks: one `main`, `header`, `footer`, a `nav` at every breakpoint, nothing outside
+- [ ] 🤖 Headings: one H1, no skips, no heading for size only, at every width
+- [ ] 🤖 Names: every link, button, icon link, image, input and iframe named clearly
+- [ ] 🤖 No generic link text ("Läs mer" / "Read more") pointing at different targets
+- [ ] 🤖 Everything clickable is a real link or button, reachable by Tab, focus visible
+- [ ] 🤖 `<html lang>` set, other-language parts marked
+- [ ] 🤖 axe clean at every width (contrast and target size: only what Lighthouse flags)
 
 ## Phase 5 · Performance
 
