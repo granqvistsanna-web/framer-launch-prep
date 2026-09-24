@@ -1,0 +1,13 @@
+{
+  "name": "framer-launch-prep",
+  "metadata": { "description": "A Claude Code skill that gets a Framer site launch-ready and measures it." },
+  "owner": { "name": "Sanna Granqvist", "email": "granqvistsanna@gmail.com" },
+  "plugins": [
+    {
+      "name": "framer-launch-prep",
+      "source": "./",
+      "description": "Pre-launch pass for Framer sites: images, alt text, schema, SEO, accessibility, Lighthouse before and after.",
+      "version": "0.1.0"
+    }
+  ]
+}
